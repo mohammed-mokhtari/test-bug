@@ -123,7 +123,12 @@ class Enterprise(models.Model):
     email_entreprise = models.EmailField(unique=True)
     telephone_entreprise = models.CharField(max_length=20, null=True, blank=True)
     secteur_activite = models.CharField(max_length=100, null=True, blank=True)
-    registre_commerce = models.CharField(max_length=100, null=True, blank=True)
+    registre_commerce_pdf = models.FileField(
+        upload_to='registre_commerce/',  # le dossier dans MEDIA
+        db_column='registre_commerce',
+        null=True,
+        blank=True
+    )
     registre_image = models.CharField(max_length=255, null=True, blank=True)
     contact_principal_nom = models.CharField(max_length=100, null=True, blank=True)
     contact_principal_poste = models.CharField(max_length=100, null=True, blank=True)
@@ -582,3 +587,15 @@ class VerificationToken(models.Model):
 
     def __str__(self):
         return f"{self.type_token} - {self.user_id}"
+    
+
+
+class Submission(models.Model):
+    hacker = models.ForeignKey(UserHacker, on_delete=models.CASCADE)
+    program = models.ForeignKey('Program', on_delete=models.CASCADE)
+    titre = models.CharField(max_length=200)
+    statut = models.CharField(max_length=50, default="en_cours")
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titre

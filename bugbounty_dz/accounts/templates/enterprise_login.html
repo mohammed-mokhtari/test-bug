@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Entreprise - AlgSec Bounty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .login-pattern {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%),
+                        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    
+    <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden">
+        
+        <!-- Left Side - Branding -->
+        <div class="login-pattern p-12 flex flex-col justify-between text-white hidden lg:flex">
+            <div>
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 mb-12">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center pulse-ring">
+                        <i class="fas fa-shield-halved text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">AlgSec Bounty</h1>
+                        <p class="text-sm text-white/80">Espace Entreprise</p>
+                    </div>
+                </div>
+                
+                <!-- Features -->
+                <div class="space-y-6">
+                    <h2 class="text-4xl font-black leading-tight mb-8">
+                        Protégez votre infrastructure avec les meilleurs hackers d'Algérie
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-1">342+ Chercheurs Qualifiés</p>
+                                <p class="text-sm text-white/80">Tous validés avec carte d'identité algérienne</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-bug text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-1">1,247+ Bugs Détectés</p>
+                                <p class="text-sm text-white/80">Système de triage et validation par nos experts</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-lock text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold mb-1">100% Sécurisé & Confidentiel</p>
+                                <p class="text-sm text-white/80">Hébergement local en Algérie, données chiffrées</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 mt-12">
+                <div class="text-center">
+                    <p class="text-3xl font-black mb-1">87</p>
+                    <p class="text-xs text-white/70">Entreprises</p>
+                </div>
+                <div class="text-center border-l border-r border-white/20">
+                    <p class="text-3xl font-black mb-1">12.5M</p>
+                    <p class="text-xs text-white/70">DA Distribués</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-black mb-1">98%</p>
+                    <p class="text-xs text-white/70">Satisfaction</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="p-12 flex flex-col justify-center slide-in">
+            <!-- Mobile Logo -->
+            <div class="lg:hidden flex items-center space-x-3 mb-8">
+                <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shield-halved text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold gradient-text">AlgSec Bounty</h1>
+                    <p class="text-xs text-gray-500">Espace Entreprise</p>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h2 class="text-3xl font-black text-gray-900 mb-2">Connexion Entreprise</h2>
+                <p class="text-gray-600">Accédez à votre espace de gestion des programmes</p>
+            </div>
+            
+            <!-- Messages d'erreur Django -->
+            {% for message in messages %}
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg flex items-start space-x-3">
+                <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5"></i>
+                <div>
+                    <p class="text-red-700 font-semibold">Erreur de connexion</p>
+                    <p class="text-red-600 text-sm">{{ message }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Form -->
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-envelope mr-2 text-purple-600"></i>
+                        Email Entreprise
+                    </label>
+                    <input 
+                        type="email" 
+                        name="email_entreprise" 
+                        required
+                        placeholder="votre.entreprise@email.dz"
+                        class="input-field w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                    >
+                </div>
+                
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-lock mr-2 text-purple-600"></i>
+                        Mot de passe
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            name="mot_de_passe" 
+                            id="password"
+                            required
+                            placeholder="••••••••"
+                            class="input-field w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePassword()"
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                        >
+                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Remember & Forgot -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm text-gray-600">Se souvenir de moi</span>
+                    </label>
+                    <a href="/forgot-password" class="text-sm text-purple-600 hover:text-purple-700 font-semibold">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+                
+                <!-- Submit Button -->
+                <button 
+                    type="submit"
+                    class="w-full gradient-bg text-white py-4 rounded-xl hover:shadow-2xl transition font-bold text-lg flex items-center justify-center space-x-2 group"
+                >
+                    <span>Se connecter</span>
+                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </form>
+            
+            <!-- Divider -->
+            <div class="flex items-center my-8">
+                <div class="flex-1 border-t border-gray-300"></div>
+                <span class="px-4 text-sm text-gray-500 font-medium">OU</span>
+                <div class="flex-1 border-t border-gray-300"></div>
+            </div>
+            
+            <!-- Register Link -->
+            <div class="text-center">
+                <p class="text-gray-600 mb-4">Vous n'avez pas encore de compte ?</p>
+                <a 
+                    href="{% url 'enterprise_register' %}" 
+                    class="inline-flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-bold text-lg group"
+                >
+                    <i class="fas fa-user-plus"></i>
+                    <span>Créer un compte entreprise</span>
+                    <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+            
+            <!-- Additional Links -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-center space-x-6 text-sm">
+                    <a href="/" class="text-gray-500 hover:text-purple-600 transition">
+                        <i class="fas fa-home mr-1"></i>
+                        Accueil
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <a href="/login/hunter" class="text-gray-500 hover:text-purple-600 transition">
+                        <i class="fas fa-user-secret mr-1"></i>
+                        Espace Chercheur
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <a href="/help" class="text-gray-500 hover:text-purple-600 transition">
+                        <i class="fas fa-question-circle mr-1"></i>
+                        Aide
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Trust Badges -->
+            <div class="mt-8 flex items-center justify-center space-x-6 text-xs text-gray-400">
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-shield-alt text-green-500"></i>
+                    <span>Sécurisé SSL</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-server text-blue-500"></i>
+                    <span>Hébergé en DZ</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-check-circle text-purple-500"></i>
+                    <span>Certifié</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        // Animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            form.style.opacity = '0';
+            form.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                form.style.transition = 'all 0.6s ease-out';
+                form.style.opacity = '1';
+                form.style.transform = 'translateY(0)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

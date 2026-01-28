@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Entreprise - AlgSec Bounty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+        
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: #f3f4f6;
+        }
+        
+        .file-upload-label.has-file {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .step-indicator.inactive {
+            background: #e5e7eb;
+            color: #9ca3af;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-8 px-4">
+    
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-8 fade-in">
+            <a href="/" class="inline-flex items-center space-x-3 mb-6">
+                <div class="w-14 h-14 gradient-bg rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shield-halved text-white text-2xl"></i>
+                </div>
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold gradient-text">AlgSec Bounty</h1>
+                    <p class="text-sm text-gray-500">Inscription Entreprise</p>
+                </div>
+            </a>
+            
+            <h2 class="text-4xl font-black text-gray-900 mb-3">Rejoignez AlgSec Bounty</h2>
+            <p class="text-lg text-gray-600">Protégez vos systèmes avec les meilleurs chercheurs algériens</p>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mb-8 fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <div class="step-indicator active">1</div>
+                    <span class="text-sm font-semibold text-gray-700">Informations</span>
+                </div>
+                <div class="flex-1 mx-4">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="step-indicator inactive">2</div>
+                    <span class="text-sm font-semibold text-gray-400">Validation</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Messages d'erreur Django -->
+        {% for message in messages %}
+        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-xl flex items-start space-x-3 fade-in">
+            <i class="fas fa-exclamation-triangle text-red-500 text-xl mt-0.5"></i>
+            <div>
+                <p class="text-red-700 font-semibold">Erreur</p>
+                <p class="text-red-600 text-sm">{{ message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Main Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 fade-in">
+            <form method="post" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Section 1: Informations Entreprise -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-building text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Informations de l'entreprise</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Nom légal -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-briefcase mr-2 text-purple-600"></i>
+                                Nom légal de l'entreprise *
+                            </label>
+                            <input 
+                                type="text" 
+                                name="nom_legal" 
+                                required
+                                placeholder="Ex: SARL Technologies Algeria"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-envelope mr-2 text-purple-600"></i>
+                                Email entreprise *
+                            </label>
+                            <input 
+                                type="email" 
+                                name="email_entreprise" 
+                                required
+                                placeholder="contact@entreprise.dz"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Utilisé pour la connexion
+                            </p>
+                        </div>
+                        
+                        <!-- Téléphone -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-phone mr-2 text-purple-600"></i>
+                                Téléphone
+                            </label>
+                            <input 
+                                type="text" 
+                                name="telephone_entreprise"
+                                placeholder="0555 12 34 56"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Secteur -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-industry mr-2 text-purple-600"></i>
+                                Secteur d'activité
+                            </label>
+                            <select 
+                                name="secteur_activite"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                                <option value="">Sélectionnez un secteur</option>
+                                <option value="Banque et Finance">Banque et Finance</option>
+                                <option value="Télécommunications">Télécommunications</option>
+                                <option value="E-commerce">E-commerce</option>
+                                <option value="Technologies">Technologies</option>
+                                <option value="Santé">Santé</option>
+                                <option value="Éducation">Éducation</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Énergie">Énergie</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 2: Contact Principal -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-tie text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Contact principal</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Nom du contact -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-purple-600"></i>
+                                Nom complet du contact
+                            </label>
+                            <input 
+                                type="text" 
+                                name="contact_principal_nom"
+                                placeholder="Mohamed Benali"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Email du contact -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-at mr-2 text-purple-600"></i>
+                                Email du contact
+                            </label>
+                            <input 
+                                type="email" 
+                                name="contact_principal_email"
+                                placeholder="m.benali@entreprise.dz"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 3: Sécurité -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-lock text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Sécurité du compte</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Mot de passe -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-key mr-2 text-purple-600"></i>
+                                Mot de passe *
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    name="mot_de_passe" 
+                                    id="password"
+                                    required
+                                    placeholder="Minimum 8 caractères"
+                                    class="input-field w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePassword()"
+                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2 space-y-1">
+                                <p class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Au moins 8 caractères
+                                </p>
+                                <p class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Mélange de lettres, chiffres et symboles
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 4: Documents -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-pdf text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Documents légaux</h3>
+                    </div>
+                    
+                    <!-- Registre de commerce -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fas fa-file-contract mr-2 text-purple-600"></i>
+                            Registre de commerce (PDF)
+                        </label>
+                        <div class="file-upload-wrapper">
+                            <input 
+                                type="file" 
+                                name="registre_commerce_pdf" 
+                                id="fileInput"
+                                accept="application/pdf"
+                                onchange="handleFileSelect(this)"
+                            >
+                            <label for="fileInput" class="file-upload-label" id="fileLabel">
+                                <div class="text-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                                    <p class="text-sm font-semibold text-gray-700">
+                                        Cliquez pour télécharger votre registre de commerce
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Format PDF uniquement • Max 5MB
+                                    </p>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="fileInfo" class="hidden mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-file-pdf text-red-600 text-2xl"></i>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900" id="fileName"></p>
+                                        <p class="text-xs text-gray-500" id="fileSize"></p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="removeFile()" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times-circle text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Ce document sera vérifié par notre équipe avant l'activation de votre compte
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Terms & Conditions -->
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-6">
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <input type="checkbox" required class="w-5 h-5 mt-1 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm text-gray-700">
+                            J'accepte les <a href="/terms" class="text-purple-600 hover:text-purple-700 font-semibold underline">conditions générales d'utilisation</a> 
+                            et la <a href="/privacy" class="text-purple-600 hover:text-purple-700 font-semibold underline">politique de confidentialité</a> 
+                            d'AlgSec Bounty. Je comprends que mon compte sera vérifié avant activation.
+                        </span>
+                    </label>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button 
+                        type="submit"
+                        class="flex-1 gradient-bg text-white py-4 rounded-xl hover:shadow-2xl transition font-bold text-lg flex items-center justify-center space-x-2 group"
+                    >
+                        <i class="fas fa-rocket"></i>
+                        <span>Créer mon compte entreprise</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Additional Info -->
+                <div class="text-center pt-6 border-t border-gray-200">
+                    <p class="text-gray-600 mb-3">Vous avez déjà un compte ?</p>
+                    <a 
+                        href="{% url 'enterprise_login' %}" 
+                        class="inline-flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-bold"
+                    >
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Se connecter</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Info Cards -->
+        <div class="grid md:grid-cols-3 gap-6 mt-8">
+            <div class="bg-white rounded-xl p-6 shadow-md text-center">
+                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-clock text-blue-600 text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-900 mb-2">Validation Rapide</h4>
+                <p class="text-sm text-gray-600">Votre compte sera vérifié sous 24-48h</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-md text-center">
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-alt text-green-600 text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-900 mb-2">100% Sécurisé</h4>
+                <p class="text-sm text-gray-600">Vos données sont chiffrées et protégées</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-md text-center">
+                <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-headset text-purple-600 text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-900 mb-2">Support 24/7</h4>
+                <p class="text-sm text-gray-600">Notre équipe est là pour vous aider</p>
+            </div>
+        </div>
+        
+        <!-- Footer Links -->
+        <div class="mt-12 text-center text-sm text-gray-500">
+            <div class="flex items-center justify-center space-x-6">
+                <a href="/" class="hover:text-purple-600 transition">Accueil</a>
+                <span>•</span>
+                <a href="/about" class="hover:text-purple-600 transition">À propos</a>
+                <span>•</span>
+                <a href="/contact" class="hover:text-purple-600 transition">Contact</a>
+                <span>•</span>
+                <a href="/help" class="hover:text-purple-600 transition">Aide</a>
+            </div>
+            <p class="mt-4">© 2026 AlgSec Bounty - Made in Algeria 🇩🇿</p>
+        </div>
+    </div>
+    
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            const fileLabel = document.getElementById('fileLabel');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            
+            if (file) {
+                fileLabel.classList.add('has-file');
+                fileInfo.classList.remove('hidden');
+                fileName.textContent = file.name;
+                fileSize.textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            }
+        }
+        
+        function removeFile() {
+            const fileInput = document.getElementById('fileInput');
+            const fileLabel = document.getElementById('fileLabel');
+            const fileInfo = document.getElementById('fileInfo');
+            
+            fileInput.value = '';
+            fileLabel.classList.remove('has-file');
+            fileInfo.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

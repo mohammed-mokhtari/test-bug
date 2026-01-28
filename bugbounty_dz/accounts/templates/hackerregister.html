@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Chercheur - AlgSec Bounty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+        
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: #f3f4f6;
+        }
+        
+        .file-upload-label.has-file {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: #ef4444; width: 33%; }
+        .strength-medium { background: #f59e0b; width: 66%; }
+        .strength-strong { background: #10b981; width: 100%; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-8 px-4">
+    
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-8 fade-in">
+            <a href="/" class="inline-flex items-center space-x-3 mb-6">
+                <div class="w-14 h-14 gradient-bg rounded-xl flex items-center justify-center">
+                    <i class="fas fa-shield-halved text-white text-2xl"></i>
+                </div>
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold gradient-text">AlgSec Bounty</h1>
+                    <p class="text-sm text-gray-500">Inscription Chercheur</p>
+                </div>
+            </a>
+            
+            <h2 class="text-4xl font-black text-gray-900 mb-3">Devenez Chercheur en Sécurité</h2>
+            <p class="text-lg text-gray-600">Rejoignez la communauté des meilleurs hackers algériens</p>
+        </div>
+        
+        <!-- Benefits Banner -->
+        <div class="grid md:grid-cols-3 gap-4 mb-8 fade-in">
+            <div class="bg-white rounded-xl p-4 shadow-md flex items-center space-x-3">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-coins text-green-600 text-xl"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 text-sm">Jusqu'à 50,000 DA</p>
+                    <p class="text-xs text-gray-600">Par bug critique</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 shadow-md flex items-center space-x-3">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-trophy text-purple-600 text-xl"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 text-sm">Classement Public</p>
+                    <p class="text-xs text-gray-600">Construisez votre réputation</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 shadow-md flex items-center space-x-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-building text-blue-600 text-xl"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 text-sm">87 Entreprises</p>
+                    <p class="text-xs text-gray-600">Programmes disponibles</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        {% if error %}
+        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-xl flex items-start space-x-3 fade-in">
+            <i class="fas fa-exclamation-triangle text-red-500 text-xl mt-0.5"></i>
+            <div>
+                <p class="text-red-700 font-semibold">Erreur</p>
+                <p class="text-red-600 text-sm">{{ error }}</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Main Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 fade-in">
+            <form method="post" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Section 1: Informations Personnelles -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="step-number">1</div>
+                        <h3 class="text-2xl font-bold text-gray-900">Informations Personnelles</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Prénom -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-purple-600"></i>
+                                Prénom *
+                            </label>
+                            <input 
+                                type="text" 
+                                name="prenom" 
+                                required
+                                placeholder="Ahmed"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Nom -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-user mr-2 text-purple-600"></i>
+                                Nom *
+                            </label>
+                            <input 
+                                type="text" 
+                                name="nom" 
+                                required
+                                placeholder="Karim"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-envelope mr-2 text-purple-600"></i>
+                                Email *
+                            </label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                required
+                                placeholder="ahmed.karim@email.dz"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Utilisé pour la connexion et notifications
+                            </p>
+                        </div>
+                        
+                        <!-- Téléphone -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-phone mr-2 text-purple-600"></i>
+                                Téléphone *
+                            </label>
+                            <input 
+                                type="text" 
+                                name="telephone" 
+                                required
+                                placeholder="0555 12 34 56"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Date de naissance -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-calendar mr-2 text-purple-600"></i>
+                                Date de naissance *
+                            </label>
+                            <input 
+                                type="date" 
+                                name="date_naissance" 
+                                required
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <!-- Adresse -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-map-marker-alt mr-2 text-purple-600"></i>
+                                Adresse *
+                            </label>
+                            <textarea 
+                                name="adresse" 
+                                required
+                                rows="3"
+                                placeholder="123 Rue de la Liberté, Alger"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent resize-none"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 2: Vérification d'Identité -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="step-number">2</div>
+                        <h3 class="text-2xl font-bold text-gray-900">Vérification d'Identité</h3>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-exclamation-circle text-yellow-600 text-xl mt-0.5"></i>
+                            <div>
+                                <p class="text-yellow-800 font-semibold text-sm">
+                                    Seuls les citoyens algériens peuvent s'inscrire
+                                </p>
+                                <p class="text-yellow-700 text-xs mt-1">
+                                    Votre carte d'identité nationale sera vérifiée par notre équipe avant l'activation de votre compte
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Numéro CIN -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-id-card mr-2 text-purple-600"></i>
+                                Numéro de Carte d'Identité Nationale (CIN) *
+                            </label>
+                            <input 
+                                type="text" 
+                                name="cni_numero" 
+                                required
+                                placeholder="123456789012345678"
+                                maxlength="18"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent font-mono text-lg"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                18 chiffres figurant sur votre carte d'identité
+                            </p>
+                        </div>
+                        
+                        <!-- Upload CIN -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-camera mr-2 text-purple-600"></i>
+                                Photo de votre Carte d'Identité *
+                            </label>
+                            <div class="file-upload-wrapper">
+                                <input 
+                                    type="file" 
+                                    name="cni_image" 
+                                    id="cinInput"
+                                    accept="image/*"
+                                    required
+                                    onchange="handleImageSelect(this)"
+                                >
+                                <label for="cinInput" class="file-upload-label" id="cinLabel">
+                                    <div class="text-center">
+                                        <i class="fas fa-id-card text-5xl text-gray-400 mb-3"></i>
+                                        <p class="text-sm font-semibold text-gray-700">
+                                            Cliquez pour télécharger une photo de votre CIN
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            Formats acceptés: JPG, PNG • Max 5MB
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-2">
+                                            ⚠️ Assurez-vous que toutes les informations sont lisibles
+                                        </p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="cinPreview" class="hidden mt-4">
+                                <div class="relative inline-block">
+                                    <img id="cinImage" src="" alt="Preview" class="max-w-full h-48 rounded-lg border-2 border-green-500 shadow-lg">
+                                    <button type="button" onclick="removeImage()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <p class="text-sm text-green-600 font-semibold mt-2">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Image téléchargée avec succès
+                                </p>
+                            </div>
+                            <div class="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <p class="text-xs text-blue-800 flex items-start">
+                                    <i class="fas fa-shield-alt text-blue-600 mr-2 mt-0.5"></i>
+                                    <span>
+                                        <strong>Confidentialité garantie:</strong> Votre carte d'identité est chiffrée et accessible uniquement à notre équipe de validation. Elle ne sera jamais partagée avec des tiers.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 3: Sécurité -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6 pb-4 border-b-2 border-gray-200">
+                        <div class="step-number">3</div>
+                        <h3 class="text-2xl font-bold text-gray-900">Sécurité du Compte</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Mot de passe -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-lock mr-2 text-purple-600"></i>
+                                Mot de passe *
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    name="mot_de_passe" 
+                                    id="password"
+                                    required
+                                    placeholder="Minimum 8 caractères"
+                                    oninput="checkPasswordStrength()"
+                                    class="input-field w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePassword('password', 'toggleIcon1')"
+                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                    <i class="fas fa-eye" id="toggleIcon1"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+                                    <span>Force du mot de passe</span>
+                                    <span id="strengthText">Faible</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-1">
+                                    <div id="strengthBar" class="password-strength strength-weak"></div>
+                                </div>
+                            </div>
+                            <div class="mt-2 space-y-1">
+                                <p class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-check-circle text-gray-400 mr-2" id="check1"></i>
+                                    Au moins 8 caractères
+                                </p>
+                                <p class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-check-circle text-gray-400 mr-2" id="check2"></i>
+                                    Lettres majuscules et minuscules
+                                </p>
+                                <p class="text-xs text-gray-500 flex items-center">
+                                    <i class="fas fa-check-circle text-gray-400 mr-2" id="check3"></i>
+                                    Au moins un chiffre
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirmer mot de passe -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-lock mr-2 text-purple-600"></i>
+                                Confirmer le mot de passe *
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    name="mot_de_passe_confirm" 
+                                    id="passwordConfirm"
+                                    required
+                                    placeholder="Retapez votre mot de passe"
+                                    oninput="checkPasswordMatch()"
+                                    class="input-field w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePassword('passwordConfirm', 'toggleIcon2')"
+                                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                    <i class="fas fa-eye" id="toggleIcon2"></i>
+                                </button>
+                            </div>
+                            <p id="matchMessage" class="text-xs mt-2 hidden"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Terms & Conditions -->
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-6">
+                    <label class="flex items-start space-x-3 cursor-pointer">
+                        <input type="checkbox" required class="w-5 h-5 mt-1 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <span class="text-sm text-gray-700">
+                            J'accepte les <a href="/terms" class="text-purple-600 hover:text-purple-700 font-semibold underline">conditions générales d'utilisation</a> 
+                            et la <a href="/privacy" class="text-purple-600 hover:text-purple-700 font-semibold underline">politique de confidentialité</a>. 
+                            Je comprends que mon compte sera vérifié sous 24-48h et que je recevrai mes accès par email.
+                        </span>
+                    </label>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button 
+                        type="submit"
+                        class="flex-1 gradient-bg text-white py-4 rounded-xl hover:shadow-2xl transition font-bold text-lg flex items-center justify-center space-x-2 group"
+                    >
+                        <i class="fas fa-user-secret"></i>
+                        <span>Créer mon compte chercheur</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Login Link -->
+                <div class="text-center pt-6 border-t border-gray-200">
+                    <p class="text-gray-600 mb-3">Vous avez déjà un compte ?</p>
+                    <a 
+                        href="/login/hunter" 
+                        class="inline-flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-bold"
+                    >
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Se connecter</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Process Steps -->
+        <div class="mt-12 bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Que se passe-t-il ensuite ?</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-file-contract text-purple-600 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">1. Soumission</h4>
+                    <p class="text-sm text-gray-600">Votre dossier est envoyé à notre équipe de validation</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-check text-blue-600 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">2. Vérification (24-48h)</h4>
+                    <p class="text-sm text-gray-600">Nous vérifions votre identité et validons votre compte</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-envelope-circle-check text-green-600 text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">3. Activation</h4>
+                    <p class="text-sm text-gray-600">Vous recevez vos accès par email et pouvez commencer !</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="mt-12 text-center text-sm text-gray-500">
+            <div class="flex items-center justify-center space-x-6 mb-4">
+                <a href="/" class="hover:text-purple-600 transition">Accueil</a>
+                <span>•</span>
+                <a href="/about" class="hover:text-purple-600 transition">À propos</a>
+                <span>•</span>
+                <a href="/contact" class="hover:text-purple-600 transition">Contact</a>
+                <span>•</span>
+                <a href="/help" class="hover:text-purple-600 transition">Aide</a>
+            </div>
+            <p>© 2026 AlgSec Bounty - Made in Algeria 🇩🇿</p>
+        </div>
+    </div>
+    
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            const check1 = document.getElementById('check1');
+            const check2 = document.getElementById('check2');
+            const check3 = document.getElementById('check3');
+            
+            let strength = 0;
+            
+            // Check length
+            if (password.length >= 8) {
+                strength++;
+                check1.classList.remove('text-gray-400');
+                check1.classList.add('text-green-500');
+            } else {
+                check1.classList.remove('text-green-500');
+                check1.classList.add('text-gray-400');
+            }
+            
+            // Check uppercase and lowercase
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
+                strength++;
+                check2.classList.remove('text-gray-400');
+                check2.classList.add('text-green-500');
+            } else {
+                check2.classList.remove('text-green-500');
+                check2.classList.add('text-gray-400');
+            }
+            
+            // Check numbers
+            if (/\d/.test(password)) {
+                strength++;
+                check3.classList.remove('text-gray-400');
+                check3.classList.add('text-green-500');
+            } else {
+                check3.classList.remove('text-green-500');
+                check3.classList.add('text-gray-400');
+            }
+            
+            // Update strength bar
+            strengthBar.className = 'password-strength';
+            if (strength === 1) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Faible';
+                strengthText.className = 'text-orange-500 font-semibold';
+            } else if (strength === 3) {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Fort';
+                strengthText.className = 'text-green-500 font-semibold';
+            }
+        }
+        
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('passwordConfirm').value;
+            const message = document.getElementById('matchMessage');
+            
+            if (confirm.length > 0) {
+                message.classList.remove('hidden');
+                if (password === confirm) {
+                    message.textContent = '✓ Les mots de passe correspondent';
+                    message.className = 'text-xs mt-2 text-green-600 font-semibold';
+                } else {
+                    message.textContent = '✗ Les mots de passe ne correspondent pas';
+                    message.className = 'text-xs mt-2 text-red-600 font-semibold';
+                }
+            } else {
+                message.classList.add('hidden');
+            }
+        }
+        
+        function handleImageSelect(input) {
+            const file = input.files[0];
+            const label = document.getElementById('cinLabel');
+            const preview = document.getElementById('cinPreview');
+            const image = document.getElementById('cinImage');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                    label.classList.add('has-file');
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function removeImage() {
+            const input = document.getElementById('cinInput');
+            const label = document.getElementById('cinLabel');
+            const preview = document.getElementById('cinPreview');
+            
+            input.value = '';
+            label.classList.remove('has-file');
+            preview.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
